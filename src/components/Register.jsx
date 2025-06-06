@@ -1,6 +1,7 @@
 import { Button, TextField } from "@radix-ui/themes";
+import { enqueueSnackbar } from "notistack";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Register = () => {
   //Controlled Components & unControlled Compoenets
@@ -11,14 +12,75 @@ const Register = () => {
     confirmPassword: "",
   });
 
+  const [formError, setFormError] = useState(null);
+
+    const navigate = useNavigate();
+
   const handleChange = (e) => {
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+    console.log(e.target.name, e.target.value)
+    setFormError("");
   };
 
   const handleSubmit = (e) => {
-    e.preventDefault()
-    console.log("Form Submitted",formData)
-    //Validations
+    e.preventDefault();
+
+    //Form Validations
+    const allUsers = JSON.parse(localStorage.getItem("mediUsers")) || [];
+
+    if (
+      !formData.name ||
+      !formData.password ||
+      !formData.confirmPassword ||
+      !formData.email
+    ) {
+      setFormError("All Fields are required");
+      enqueueSnackbar("All Fields are required", { variant: "error" });
+      return;
+    }
+
+    const filtredArray = allUsers.filter(
+      (each) => each.email === formData.email
+    );
+
+    if (filtredArray.length > 0) {
+      setFormError("User Already Exists. Use Different Email");
+      enqueueSnackbar("User Already Exists. Use Different Email", {
+        variant: "error",
+      });
+
+      return;
+    }
+
+    if (formData.confirmPassword !== formData.password) {
+      setFormError("Passwords Doesn't match");
+      enqueueSnackbar("Passwords Doesn't match", { variant: "error" });
+
+      return;
+    }
+
+    if (formData.password < 6) {
+      setFormError("Minimum 6 characters required for the Password");
+      enqueueSnackbar("Minimum 6 characters required for the Password", {
+        variant: "error",
+      });
+
+      return;
+    }
+
+    allUsers.push(formData);
+    localStorage.setItem("mediUsers", JSON.stringify(allUsers));
+    setFormData({
+    name: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+    });
+    setFormError("");
+    enqueueSnackbar("User Registered Successfully", { variant: "success" });
+    
+    //Login page redirection
+    navigate("/login");
   };
 
   return (
@@ -59,6 +121,7 @@ const Register = () => {
           style={{ height: 35 }}
           onChange={handleChange}
         />
+        {formError && <p className="text-red-600 text-sm">*{formError}</p>}
 
         <div>
           <Button type="submit">Register</Button>

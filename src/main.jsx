@@ -6,13 +6,16 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "@radix-ui/themes/styles.css";
 import { Theme } from "@radix-ui/themes";
 import { MyContext } from "./context/AuthContext.jsx";
+import { SnackbarProvider } from "notistack";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <MyContext>
-      <Theme accentColor="orange">
-        <App />
-      </Theme>
-    </MyContext>
+    <SnackbarProvider>
+      <MyContext>
+        <Theme accentColor="orange">
+          <App />
+        </Theme>
+      </MyContext>
+    </SnackbarProvider>
   </StrictMode>
 );
