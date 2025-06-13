@@ -69,8 +69,8 @@ const Login = () => {
     enqueueSnackbar("User Login Successfully", { variant: "success" });
 
     isLogin(true)
-
-    //Login page redirection
+    localStorage.setItem("isLogin", JSON.stringify(true))
+    //Home page redirection
     navigate("/");
   };
 

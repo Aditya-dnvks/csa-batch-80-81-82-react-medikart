@@ -7,6 +7,7 @@ const NavBar = () => {
 
   const handleLogOut = () => {
     isLogin(false)
+    localStorage.setItem("isLogin", JSON.stringify(false))
   } //JWT 
 
   return (
