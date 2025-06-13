@@ -14,7 +14,7 @@ const Register = () => {
 
   const [formError, setFormError] = useState(null);
 
-    const navigate = useNavigate();
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
@@ -127,7 +127,7 @@ const Register = () => {
           <Button type="submit">Register</Button>
         </div>
         <p className="m-0">
-          Already a Registered User? Login <Link to={"/login"}>here</Link>
+          Already a Registered User? Login <span  className="underline text-blue-600"><Link to={"/login"}>here</Link></span>
         </p>
       </form>
     </div>
